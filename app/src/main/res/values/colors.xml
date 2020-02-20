@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="FRSubTitle">#616161</color>
     <color name="FRTitle">#212121</color>
+    <color name="FRBackground">#efefef</color>
 </resources>

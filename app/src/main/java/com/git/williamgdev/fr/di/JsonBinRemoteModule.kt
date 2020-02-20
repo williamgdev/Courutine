@@ -16,6 +16,5 @@ val ItemRemoteModule = module {
             }
         )
     }
-   single { ApiContext<JsonBinService>(get())}
-
+    single { ApiContext<JsonBinService>(get()) }
 }

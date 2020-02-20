@@ -5,29 +5,63 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.git.williamgdev.fr.data.ItemDTO
+import com.git.williamgdev.fr.data.ItemDiff
 import com.git.williamgdev.fr.databinding.ItemListLayoutBinding
+import com.git.williamgdev.fr.databinding.ItemListWithHeaderLayoutBinding
 
-class ItemListAdapter : RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
+class ItemListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val itemList = mutableListOf<ItemDTO>()
 
-    class ItemViewHolder(private val binding: ItemListLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(itemDTO: ItemDTO) {
-            binding.item = itemDTO
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
+            ItemViewHolderType.HEADER.value -> {
+
+                val binding =
+                    ItemListWithHeaderLayoutBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                ItemViewHolderHeader(binding)
+            }
+
+            ItemViewHolderType.CONTENT.value -> {
+                val binding =
+                    ItemListLayoutBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                ItemViewHolderContent(binding)
+            }
+            else -> {
+                throw Exception("Bad view type: $viewType")
+            }
+        }
+
+    override fun getItemCount() = itemList.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ItemViewHolderHeader -> {
+                holder.bindItem(itemList[position])
+            }
+            is ItemViewHolderContent -> {
+                holder.bindItem(itemList[position])
+            }
+            else -> {
+                throw Exception("Unknown view holder type: $position")
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding =
-            ItemListLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
-    }
-
-    override fun getItemCount(): Int = itemList.size
-
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bindItem(itemList[position])
-    }
+    override fun getItemViewType(position: Int): Int =
+        if (position > 0 && itemList[position - 1].listId == itemList[position].listId) {
+            ItemViewHolderType.CONTENT.value
+        } else {
+            ItemViewHolderType.HEADER.value
+        }
 
     fun submitList(newList: List<ItemDTO>) {
         val result =
@@ -37,16 +71,27 @@ class ItemListAdapter : RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
         result.dispatchUpdatesTo(this)
     }
 
-    class ItemDiff(private val oldList: List<ItemDTO>, private val newList: List<ItemDTO>) : DiffUtil.Callback() {
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].id == newList[newItemPosition].id
+    interface ItemViewHolder {
+        fun bindItem(itemDTO: ItemDTO)
+    }
 
-        override fun getOldListSize() = oldList.size
+    class ItemViewHolderContent(private val binding: ItemListLayoutBinding) : ItemViewHolder,
+        RecyclerView.ViewHolder(binding.root) {
+        override fun bindItem(itemDTO: ItemDTO) {
+            binding.item = itemDTO
+        }
+    }
 
-        override fun getNewListSize() = newList.size
+    class ItemViewHolderHeader(private val binding: ItemListWithHeaderLayoutBinding) :
+        ItemViewHolder,
+        RecyclerView.ViewHolder(binding.root) {
+        override fun bindItem(itemDTO: ItemDTO) {
+            binding.item = itemDTO
+        }
+    }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldList[oldItemPosition].name == newList[newItemPosition].name &&
-                    oldList[oldItemPosition].listId == newList[newItemPosition].listId
+    enum class ItemViewHolderType(val value: Int) {
+        HEADER(100), CONTENT(200)
     }
 }
+

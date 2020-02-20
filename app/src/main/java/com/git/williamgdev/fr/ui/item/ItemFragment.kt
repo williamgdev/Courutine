@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.git.williamgdev.fr.R
 import com.git.williamgdev.fr.data.ItemDTO
 import com.git.williamgdev.fr.databinding.ItemFragmentBinding
@@ -40,7 +42,10 @@ class ItemFragment : Fragment(), ItemNavigator {
 
     private fun setupItemRecycler() {
         val itemListAdapter = ItemListAdapter()
-        binding.itemRecycler.adapter = itemListAdapter
+        binding.itemRecycler.apply {
+            adapter = itemListAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        }
         itemViewModel.itemList.observe(viewLifecycleOwner, Observer { itemList ->
             itemListAdapter.submitList(itemList)
         })

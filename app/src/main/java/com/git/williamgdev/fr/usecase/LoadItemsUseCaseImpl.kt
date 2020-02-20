@@ -20,6 +20,7 @@ class LoadItemsUseCaseImpl(
         onError: (Throwable) -> Unit
     ) {
         return if (!byPassCache) {
+            //@TODO Here use Database strategy
             itemRepository.getItems()
         } else {
             val tag = "getAllItems"
@@ -40,6 +41,9 @@ class LoadItemsUseCaseImpl(
     override fun filterAndSortItems(itemList: List<ItemDTO>): List<ItemDTO> {
         return itemList.filter { item ->
             item.name != null && item.name != ""
-        }.sortedWith(compareBy { it.name })
+        }.sortedWith(
+            compareBy<ItemDTO> { it.listId }
+                .thenBy { it.name }
+        )
     }
 }

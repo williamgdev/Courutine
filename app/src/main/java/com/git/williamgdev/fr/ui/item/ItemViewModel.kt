@@ -29,8 +29,4 @@ class ItemViewModel(private val loadItemsUseCase: LoadItemsUseCase) : ViewModel(
         itemNavigator.get()?.showError(throwable)
     }
 
-    private fun displayItems(itemsDTO: List<ItemDTO>?) {
-        itemNavigator.get()?.displayItems(itemsDTO)
-    }
-
 }
