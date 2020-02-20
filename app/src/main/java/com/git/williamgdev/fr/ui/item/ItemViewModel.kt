@@ -10,16 +10,19 @@ import java.lang.ref.WeakReference
 class ItemViewModel(private val loadItemsUseCase: LoadItemsUseCase) : ViewModel() {
     val itemList = MutableLiveData<List<ItemDTO>>()
     var itemNavigator = WeakReference<ItemNavigator>(null)
+    var loading = MutableLiveData<Boolean>().apply { value = false }
 
     fun loadItems(listId: String) {
-        //@TODO Progress Bar
+        loading.postValue(true)
         loadItemsUseCase.loadItems(
             listId = listId,
             byPassCache = true,
             onSuccess = { items ->
+                loading.postValue(false)
                 itemList.postValue(items)
             },
             onError = { error ->
+                loading.postValue(false)
                 showError(error)
             }
         )

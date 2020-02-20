@@ -4,5 +4,5 @@ import com.git.williamgdev.fr.data.ItemDTO
 
 interface ItemNavigator {
     fun showError(throwable: Throwable?)
-    fun displayItems(itemsDTO: List<ItemDTO>?)
+    fun displayItemDetail(itemsDTO: List<ItemDTO>?)
 }

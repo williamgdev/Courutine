@@ -31,12 +31,12 @@ class ItemFragment : Fragment(), ItemNavigator {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = ItemFragmentBinding.inflate(inflater, container, false)
         itemViewModel.apply {
             itemNavigator = WeakReference(this@ItemFragment)
         }
-        binding = ItemFragmentBinding.inflate(inflater, container, false)
-        binding.viewModel = itemViewModel
         binding.lifecycleOwner = this
+        binding.viewModel = itemViewModel
         return binding.root
     }
 
@@ -64,7 +64,8 @@ class ItemFragment : Fragment(), ItemNavigator {
         }
     }
 
-    override fun displayItems(itemsDTO: List<ItemDTO>?) {
+    override fun displayItemDetail(itemsDTO: List<ItemDTO>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
