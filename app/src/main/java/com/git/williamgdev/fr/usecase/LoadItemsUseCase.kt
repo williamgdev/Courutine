@@ -9,6 +9,10 @@ interface LoadItemsUseCase {
         onSuccess: (List<ItemDTO>) -> Unit,
         onError: (Throwable) -> Unit
     )
+    suspend fun loadItems(
+        listId: String,
+        byPassCache: Boolean
+    ): List<ItemDTO>
 
     fun filterAndSortItems(itemList: List<ItemDTO>): List<ItemDTO>
 }

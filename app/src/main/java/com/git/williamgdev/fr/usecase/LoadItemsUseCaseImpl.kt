@@ -7,6 +7,7 @@ import com.git.williamgdev.fr.network.DisposableManager
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlin.Exception
 
 class LoadItemsUseCaseImpl(
     private val itemRepository: ItemRepository,
@@ -36,6 +37,10 @@ class LoadItemsUseCaseImpl(
                 .subscribe(onSuccess, onError)
             DisposableManager.add(tag, disposable)
         }
+    }
+
+    override suspend fun loadItems(listId: String, byPassCache: Boolean): List<ItemDTO> {
+        return itemRemoteRepository.getAllItemsCall(listId).execute().body() ?: throw Exception("Error needs to be handle")
     }
 
     override fun filterAndSortItems(itemList: List<ItemDTO>): List<ItemDTO> {

@@ -19,10 +19,12 @@ allprojects {
     }
 
     ext {
+        coroutinesVersion = '1.3.2'
         gsonVersion = '2.8.2'
         koinVersion = '0.9.3'
         koinViewmodelVersion='1.0.0'
         leakCanaryVersion = '1.6.3'
+        lifecycle_version = '2.2.0'
         okhttpVersion = '3.11.0'
         retrofitVersion = '2.3.0'
         rxandroidVersion='2.1.0'
@@ -30,10 +32,14 @@ allprojects {
         rxKotlinVersion = '2.4.0'
 
         appDependencies = [
+                coroutinesCore:             "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
+                coroutinesAndroid:          "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
                 gson:                       "com.google.code.gson:gson:$retrofitVersion",
                 koin:                       "org.koin:koin-android:$koinVersion",
                 koinArch:                   "org.koin:koin-android-architecture:$koinVersion",
                 koinViewmodel:              "org.koin:koin-android-viewmodel:$koinViewmodelVersion",
+                lifeCycleExt:               "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+                lifeCycleViewModel:         "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
                 okHttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:$okhttpVersion",
                 retrofit:                   "com.squareup.retrofit2:retrofit:$retrofitVersion",
                 retrofitGson:               "com.squareup.retrofit2:converter-gson:$retrofitVersion",
